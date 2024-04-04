@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
 	
 	@Autowired
-	private StudentRepository studentRepository;
+	private StudentService studentService;
 	
 	
 
-    public StudentController(StudentRepository studentRepository) {
+    public StudentController(StudentService studentService) {
 		super();
-		this.studentRepository = studentRepository;
+		this.studentService= studentService;
 	}
    
     public StudentController() {
@@ -36,69 +36,68 @@ public class StudentController {
 
 	@PostMapping("/add-student")
     public ResponseEntity<String> addStudent(@RequestBody Student student){
-    	studentRepository.saveStudent(student);
+    	studentService.addStudent(student);
         return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
     }
 
     @PostMapping("/add-teacher")
     public ResponseEntity<String> addTeacher(@RequestBody Teacher teacher){
-    	studentRepository.saveTeacher(teacher);
+    	studentService.addTeacher(teacher);
         return new ResponseEntity<>("New teacher added successfully", HttpStatus.CREATED);
     }
 
     @PutMapping("/add-student-teacher-pair")
     public ResponseEntity<String> addStudentTeacherPair(@RequestParam String student, @RequestParam String teacher){
-    	studentRepository.saveStudentTeacherPair(teacher, student);
-        return new ResponseEntity<>("New student-teacher pair added successfully", HttpStatus.CREATED);
+    	studentService.createStudentTeacherPair(student, teacher);
+    	return new ResponseEntity<>("New student-teacher pair added successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/get-student-by-name/{name}")
     public ResponseEntity<Student> getStudentByName(@PathVariable String name){
-        Student student = studentRepository.findStudent(name); // Assign student by calling service layer method
-
+    	 Student student = studentService.findStudent(name);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-teacher-by-name/{name}")
     public ResponseEntity<Teacher> getTeacherByName(@PathVariable String name){
-        Teacher teacher = studentRepository.findTeacher(name); // Assign student by calling service layer method
+        Teacher teacher = studentService.findTeacher(name); // Assign student by calling service layer method
 
         return new ResponseEntity<>(teacher, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-students-by-teacher-name/{teacher}")
     public ResponseEntity<List<String>> getStudentsByTeacherName(@PathVariable String teacher){
-        List<String> students = studentRepository.findStudentsFromTeacher(teacher); // Assign list of student by calling service layer method
+        List<String> students = studentService.findStudentsFromTeacher(teacher); // Assign list of student by calling service layer method
 
         return new ResponseEntity<>(students, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-all-students")
     public ResponseEntity<List<String>> getAllStudents(){
-        List<String> students = studentRepository.findAllStudents(); // Assign list of student by calling service layer method
+        List<String> students = studentService.findAllStudents(); // Assign list of student by calling service layer method
 
         return new ResponseEntity<>(students, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete-teacher-by-name")
     public ResponseEntity<String> deleteTeacherByName(@RequestParam String teacher){
-    	studentRepository.deleteTeacher(teacher);
+    	studentService.deleteTeacher(teacher);
 
         return new ResponseEntity<>(teacher + " removed successfully", HttpStatus.CREATED);
     }
     @DeleteMapping("/delete-all-teachers")
     public ResponseEntity<String> deleteAllTeachers(){
-    	studentRepository.deleteAllTeachers();
+    	studentService.deleteAllTeachers() ;
 
         return new ResponseEntity<>("All teachers deleted successfully", HttpStatus.CREATED);
     }
 
-	public StudentRepository getStudentRepository() {
-		return studentRepository;
+	public StudentService getStudentRepository() {
+		return studentService;
 	}
 
-	public void setStudentRepository(StudentRepository studentRepository) {
-		this.studentRepository = studentRepository;
+	public void setStudentRepository(StudentService studentService) {
+		this.studentService = studentService;
 	}
     
     
