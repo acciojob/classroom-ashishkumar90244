@@ -63,12 +63,24 @@ public class StudentRepository {
 
     public void deleteTeacher(String teacher){
     	teacherMap.remove(teacher);
+    	for(String student:teacherStudentMapping.get(teacher)) {
+    		if(studentMap.containsKey(student))
+    			studentMap.remove(student);
+    	}
     	teacherStudentMapping.remove(teacher);
+    	
         // your code goes here
     }
 
     public void deleteAllTeachers(){
     	teacherMap.clear();
+    	for(String teacher : teacherStudentMapping.keySet()) {
+    		for(String student:teacherStudentMapping.get(teacher)) {
+        		if(studentMap.containsKey(student))
+        			studentMap.remove(student);
+        	}
+    		
+    	}
     	teacherStudentMapping.clear();
         // your code goes here
     }
