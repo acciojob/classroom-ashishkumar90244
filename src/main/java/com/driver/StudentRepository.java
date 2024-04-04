@@ -18,12 +18,14 @@ public class StudentRepository {
     }
 
     public void saveStudent(Student student){
-    	studentMap.put(student.getName(), student);
+    	if(student!=null)
+    		studentMap.put(student.getName(), student);
         // your code goes here
     }
 
     public void saveTeacher(Teacher teacher){
-    	teacherMap.put(teacher.getName(), teacher);
+    	if(teacher!=null)
+    		teacherMap.put(teacher.getName(), teacher);
         // your code goes here
     }
 
@@ -57,7 +59,11 @@ public class StudentRepository {
     }
 
     public List<String> findAllStudents(){
-    	return new LinkedList<>(studentMap.keySet());
+    	List<String> list = new LinkedList<>();
+    	for (Map.Entry<String, Student> entry : studentMap.entrySet()) {
+            list.add(entry.getKey());
+        }
+    	return list;
         // your code goes here
     }
 
